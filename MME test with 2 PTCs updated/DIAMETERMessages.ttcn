@@ -1,0 +1,248 @@
+module DIAMETERMessages 
+{
+       type record Diameter_Header
+    {
+        integer Version (0..255),
+        integer MessageLength (0..16777215),
+        boolean R,
+        boolean P,
+        boolean E,
+        boolean T,
+        boolean r1,
+        boolean r2,
+        boolean r3,
+        boolean r4,
+        integer CommandCode(0..16777215),        
+        integer ApplicationID(0..4294967295),
+        integer HopByHopID (0..4294967295),
+        integer EndToEndID (0..4294967295)
+    }
+    
+    type record AVPHeader
+    {
+        integer AVPCode(0..4294967295),
+        boolean V,
+        boolean M,
+        boolean P,
+        boolean r1,
+        boolean r2,
+        boolean r3,
+        boolean r4,
+        boolean r5,
+        integer AVPLength(0..16777215),        
+        integer VendorID(0..4294967295) optional
+    }
+
+	type record DIAMETER_AuthenticationInformationRequest 
+	{
+		Diameter_Header DiameterHeader,
+		SessionIdAVP SessionId,
+ 		IMSI_AVP IMSI,
+		Requested_EUTRAN_Authentication_InfoAVP requestedEUTRANAuthInfo
+	}	
+/*------------------------------------------------------------------------------------------------------------------------*/
+	type record SessionIdAVP
+	{
+		AVPHeader aVPHeader,
+		SessionIdDatapart session_id
+	}
+
+	type record SessionIdDatapart
+	{
+		Auth_Session_State ASS,
+ 		Origin_Host originHost,	
+ 		Origin_Realm originRealm,
+		Destination_Realm destinationRealm,
+		User_Name userName,
+		Visited_PLMN_Id vPLMNID	
+	}
+
+	type record Auth_Session_State
+	{
+		AVPHeader aVPHeader,
+		Auth_Session_Statedata auth_Session_State
+	}
+	type enumerated Auth_Session_Statedata {STATE_MAINTAINED, NO_STATE_MAINTAINED}
+
+	type record Origin_Host
+    {
+        AVPHeader aVPHeader,
+        OriginHostData originHostData
+    }		
+	type record OriginHostData
+    {
+        charstring OriginHostDataPart,
+        integer PAD1 (0..255) optional,
+        integer PAD2 (0..255) optional,
+        integer PAD3 (0..255) optional
+    } 
+	
+	type record Origin_Realm
+    {
+        AVPHeader aVPHeader,
+        OriginRealmData originRealmData
+    }
+	type record OriginRealmData
+    {
+        charstring OriginRealmDataPart,
+        integer PAD1 (0..255) optional,
+        integer PAD2 (0..255) optional,
+        integer PAD3 (0..255) optional
+    }
+	
+	type record Destination_Realm
+    {
+        AVPHeader aVPHeader,
+        DestinationRealmData destinationRealmData
+    }
+	type record DestinationRealmData
+    {
+        charstring DestinationRealmDataPart,
+        integer PAD1 (0..255) optional,
+        integer PAD2 (0..255) optional,
+        integer PAD3 (0..255) optional
+    } 
+
+	type record User_Name
+    {
+        AVPHeader aVPHeader,
+        UserNameData userNameData
+    }
+	type record UserNameData
+    {
+        charstring UserNameDataPart,
+        integer PAD1 (0..255) optional,
+        integer PAD2 (0..255) optional,
+        integer PAD3 (0..255) optional
+    }	
+
+	type record Visited_PLMN_Id
+    {
+        AVPHeader aVPHeader,
+        octetstring VisitedPLMNIdDatapart
+    }	
+	
+/*------------------------------------------------------------------------------------------------------------------------*/
+
+	type integer IMSI_AVP;	
+/*------------------------------------------------------------------------------------------------------------------------*/
+
+	type record Requested_EUTRAN_Authentication_InfoAVP
+	{
+		AVPHeader aVPHeader,
+		ReqEUTRAN_Authentication_InfoDataPart ReqEAI optional
+	}	
+
+	type record ReqEUTRAN_Authentication_InfoDataPart
+	{
+		integer NumberOfRequestedVectors optional,
+		integer ImmediateResponsePreferred optional, 
+		octetstring ReSynchronizationInfo optional 
+	}
+
+/*--------------------------------------------MME TO HSS PART COMPLETED---------------------------------------------------*/
+/*--------------------------------------------HSS TO MME PART STARTED-----------------------------------------------------*/
+
+	type record DIAMETER_AuthenticationInformationAnswer 
+	{
+		Diameter_Header DiameterHeader,
+		AnsSessionIdData AnsSessionId,
+		EUTRAN_Authentication_InfoAVP EUTRANAuthInfo
+	}
+
+	type record AnsSessionIdData
+	{
+		AVPHeader aVPHeader,
+		AnsSessionIdDatapart AnsSession_id
+	}
+	type record AnsSessionIdDatapart
+	{
+		AnsAuth_Session_State AnsAuthSessionState,
+		AnsOrigin_Host AnsOriginHost,
+		AnsOrigin_Realm AnsOriginRealm
+	}
+
+	type record AnsAuth_Session_State
+	{
+		AVPHeader aVPHeader,
+		AnsAuth_Session_Statedata AnsAuthSessionState
+	}
+	type enumerated AnsAuth_Session_Statedata {STATE_MAINTAINED, NO_STATE_MAINTAINED}
+
+	type record AnsOrigin_Host
+    {
+        AVPHeader aVPHeader,
+        AnsOrigin_HostData AnsOriginHostData
+    }
+			
+	type record AnsOrigin_HostData
+    {
+        charstring AnsOriginHostDataPart,
+        integer PAD1 (0..255) optional,
+        integer PAD2 (0..255) optional,
+        integer PAD3 (0..255) optional
+    } 
+
+ 	type record AnsOrigin_Realm
+    {
+        AVPHeader aVPHeader,
+        AnsOriginRealmData AnsOriginRealmData
+    }
+	type record AnsOriginRealmData
+    {
+        charstring AnsOriginRealmDataPart,
+        integer PAD1 (0..255) optional,
+        integer PAD2 (0..255) optional,
+        integer PAD3 (0..255) optional
+    }
+	
+
+
+	type record EUTRAN_Authentication_InfoAVP
+	{
+		AVPHeader aVPHeader,
+		EUTRAN_Vector EAI
+	}
+
+	type record EUTRAN_Vector
+	{
+		AVPHeader aVPHeader,
+ 		EUTRAN_VectorDatapart EUTRANVectorDatapart
+	}
+	type record EUTRAN_VectorDatapart
+	{
+		ITEM_NUMBER item_number optional,
+		RAND RANDnum,
+		XRES XRESnum,
+		AUTN AUTNnum,
+		KASME KASMEnum
+	}
+	type record ITEM_NUMBER
+	{
+		AVPHeader aVPHeader,
+		integer ITEM_NUMBERdatapart (0..4294967295) optional
+	}	
+	type record RAND
+	{
+		AVPHeader aVPHeader,
+		octetstring RANDdatapart
+	}
+	type record XRES
+	{
+		AVPHeader aVPHeader,
+		octetstring XRESdatapart
+	}	
+	type record AUTN
+	{
+		AVPHeader aVPHeader,
+		octetstring AUTNdatapart
+	}
+	type record KASME
+	{
+		AVPHeader aVPHeader,
+		octetstring KASMEdatapart
+	}
+		
+
+
+}

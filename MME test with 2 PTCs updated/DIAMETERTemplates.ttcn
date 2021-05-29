@@ -1,0 +1,499 @@
+/*
+ * @author
+ *     
+ * @version
+ *     1.0
+ * @desc
+ *     
+ * @remark
+ *     
+ * @see
+ *     
+ */ 
+module DIAMETERTemplates 
+{
+        import from DIAMETERMessages all;
+    
+    /*template DIAMETER_AuthenticationInformationRequest DIAMETER_AIR_R_T1 := "SESSION ID+IMSI+EUTRAN AUTH Details";
+    template DIAMETER_AuthenticationInformationAnswer DIAMETER_AIA_S_T1 := "SESSION ID+EUTRA AUTH INFO:XRES, RAND, AUTN, KASME";*/
+
+	template Auth_Session_State authSessionStateAVP:=
+	{
+		aVPHeader :=
+        {
+            AVPCode := 277,
+            V := false,
+            M := true,
+            P := false,
+            r1 := false,
+            r2 := false,
+            r3 := false,
+            r4 := false,
+            r5 := false,
+            AVPLength := 8,            
+            VendorID := ?
+        },
+ 		auth_Session_State := NO_STATE_MAINTAINED
+	}
+
+	template Origin_Host originhostAVP := 
+    {
+        aVPHeader :=
+        {
+            AVPCode := 264,
+            V := false,
+            M := true,
+            P := false,
+            r1 := false,
+            r2 := false,
+            r3 := false,
+            r4 := false,
+            r5 := false,
+            AVPLength := 8+52,            
+            VendorID := ?
+        },
+        originHostData := 
+        {
+            OriginHostDataPart := "DRATCLOUD1.DRA.MNC013.MNC.MCC404.MCC.3GPPNETWORK.ORG", //52 bytes
+            PAD1 := ?,
+            PAD2 := ?,
+            PAD3 := ?
+        } //56 bytes
+    }
+    template Origin_Realm originrealmAVP  := 
+    {
+        aVPHeader :=
+        {
+            AVPCode := 296,
+            V := false,
+            M := true,
+            P := false,
+            r1 := false,
+            r2 := false,
+            r3 := false,
+            r4 := false,
+            r5 := false,
+            AVPLength := 8+37,            
+            VendorID := ? 
+        },
+        originRealmData := 
+        {
+            OriginRealmDataPart := "MNC013.MNC.MCC404.MCC.3GPPNETWORK.ORG", //37 bytes
+            PAD1 := 0,
+            PAD2 := 0,
+            PAD3 := 0
+        } 
+	
+	}
+
+    template Destination_Realm destinationRealmAVP  := 
+    {
+        aVPHeader :=
+        {
+            AVPCode := 283,
+            V := false,
+            M := true,
+            P := false,
+            r1 := false,
+            r2 := false,
+            r3 := false,
+            r4 := false,
+            r5 := false,
+            AVPLength := 8+23,            
+            VendorID := ? 
+        },
+        destinationRealmData := 
+        {
+            DestinationRealmDataPart := "HSS.AIC.3GPPNETWORK.ORG", //23 bytes
+            PAD1 := 0,
+            PAD2 := ?,
+            PAD3 := ?
+        } 
+	
+	}	
+
+	 template User_Name UserNameAVP  := 
+    {
+        aVPHeader :=
+        {
+            AVPCode := 1,
+            V := false,
+            M := true,
+            P := false,
+            r1 := false,
+            r2 := false,
+            r3 := false,
+            r4 := false,
+            r5 := false,
+            AVPLength := 8+6,            
+            VendorID := ?
+        },
+		userNameData:= 
+		{
+			UserNameDataPart:= "TCLOUD",
+			PAD1 := 0,
+            PAD2 := 0,
+            PAD3 := ?
+		}
+	
+	}		
+
+	template Visited_PLMN_Id visitedPLMNIdAVP  := 
+    {
+        aVPHeader :=
+        {
+            AVPCode := 1407,
+            V := false,
+            M := true,
+            P := false,
+            r1 := false,
+            r2 := false,
+            r3 := false,
+            r4 := false,
+            r5 := false,
+            AVPLength := 8+8,            
+            VendorID := ?
+        },
+       VisitedPLMNIdDatapart:= '5321'O
+	
+	}	
+/*------------------------------------------------------------------------------------------------------------------------*/
+	template SessionIdAVP ts_SessionIdAVP_1:=
+	{
+		aVPHeader :=
+        {
+            AVPCode := 263,
+            V := false,
+            M := true,
+            P := false,
+            r1 := false,
+            r2 := false,
+            r3 := false,
+            r4 := false,
+            r5 := false,
+            AVPLength := 8,            
+            VendorID := ?
+        },
+		session_id:= ts_SessionIdDatapart_1
+	}
+	template SessionIdDatapart ts_SessionIdDatapart_1:=
+	{
+		ASS:= authSessionStateAVP,
+ 		originHost:= originhostAVP,
+		originRealm:= originrealmAVP,
+		destinationRealm:= destinationRealmAVP,
+ 		userName:= UserNameAVP,	
+		vPLMNID:= visitedPLMNIdAVP
+	} 	
+
+	template IMSI_AVP ts_IMSI_AVP_1 := 111222333444555;
+
+	template Requested_EUTRAN_Authentication_InfoAVP ts_EUTRANauthInfo_1 := 
+    {
+        aVPHeader :=
+        {
+            AVPCode := 1408,
+            V := false,
+            M := true,
+            P := false,
+            r1 := false,
+            r2 := false,
+            r3 := false,
+            r4 := false,
+            r5 := false,
+            AVPLength := 8,            
+            VendorID := ?
+        },
+       ReqEAI := ?
+	
+	}
+	
+	template Diameter_Header ts_diameterheader_1 := 
+ 	{
+			Version := 1,
+			MessageLength := 20+8+8+8+8+6+8+23+8+37+8+52+8+8,
+			R := true,
+			P := false,
+			E := false,
+			T := false,
+			r1 := false,
+			r2 := false,
+			r3 := false,
+			r4 := false,
+			CommandCode := 318, //000000000000000100011000        
+			ApplicationID := 16777251,
+			HopByHopID := 4723847,
+			EndToEndID := 5498599        
+	}
+		
+	template DIAMETER_AuthenticationInformationRequest DIAMETER_AIR_R_T1:=
+	{
+		DiameterHeader:= ts_diameterheader_1,
+		SessionId:= ts_SessionIdAVP_1,
+ 		IMSI:= ts_IMSI_AVP_1,
+		requestedEUTRANAuthInfo:= ts_EUTRANauthInfo_1
+	}
+//--------------------------------------------MME TO HSS PART COMPLETED---------------------------------------------------
+//--------------------------------------------HSS TO MME PART STARTED-----------------------------------------------------
+
+	template AnsAuth_Session_State AnsAuthSessionStateAVP :=
+	{
+		aVPHeader :=
+        {
+            AVPCode := 277,
+            V := false,
+            M := true,
+            P := false,
+            r1 := false,
+            r2 := false,
+            r3 := false,
+            r4 := false,
+            r5 := false,
+            AVPLength := 8,            
+            VendorID := omit
+        },
+ 		AnsAuthSessionState := NO_STATE_MAINTAINED
+	
+	}
+
+	template AnsOrigin_Host AnsOriginhostAVP := 
+    {
+        aVPHeader :=
+        {
+            AVPCode := 264,
+            V := false,
+            M := true,
+            P := false,
+            r1 := false,
+            r2 := false,
+            r3 := false,
+            r4 := false,
+            r5 := false,
+            AVPLength := 8+28,            
+            VendorID := omit 
+        },
+        AnsOriginHostData := 
+        {
+            AnsOriginHostDataPart := "HSS1.HSS.AIC.3GPPNETWORK.ORG", //28 bytes
+            PAD1 := omit,
+            PAD2 := omit,
+            PAD3 := omit
+        }	
+	}
+
+    template AnsOrigin_Realm AnsoriginrealmAVP  := 
+    {
+        aVPHeader :=
+        {
+            AVPCode := 296,
+            V := false,
+            M := true,
+            P := false,
+            r1 := false,
+            r2 := false,
+            r3 := false,
+            r4 := false,
+            r5 := false,
+            AVPLength := 8+23,            
+            VendorID := omit 
+        },
+        AnsOriginRealmData := 
+        {
+            AnsOriginRealmDataPart := "HSS.AIC.3GPPNETWORK.ORG", //23 bytes
+            PAD1 := 0,
+            PAD2 := omit,
+            PAD3 := omit
+        } 
+	
+	}	
+	template AnsSessionIdDatapart tr_AnsSessionIdDatapart_1:=
+	{
+		AnsAuthSessionState := AnsAuthSessionStateAVP,
+ 		AnsOriginHost:= AnsOriginhostAVP,
+ 		AnsOriginRealm:= AnsoriginrealmAVP 
+	}
+
+	template AnsSessionIdData tr_AnsSessionIdData_1:=
+	{
+		aVPHeader :=
+        {
+            AVPCode := 263,
+            V := false,
+            M := true,
+            P := false,
+            r1 := false,
+            r2 := false,
+            r3 := false,
+            r4 := false,
+            r5 := false,
+            AVPLength := 8,            
+            VendorID := omit 
+        },
+		AnsSession_id := tr_AnsSessionIdDatapart_1	
+	}
+
+	template ITEM_NUMBER tr_itemNummber_1 :=
+	{
+		aVPHeader :=
+        {
+            AVPCode := 1419,
+            V := false,
+            M := true,
+            P := false,
+            r1 := false,
+            r2 := false,
+            r3 := false,
+            r4 := false,
+            r5 := false,
+            AVPLength := 8,            
+            VendorID := omit 
+        },
+ 		ITEM_NUMBERdatapart	:= omit
+	}	
+	template RAND tr_RAND_1:=
+	{
+		aVPHeader :=
+        {
+            AVPCode := 1447,
+            V := false,
+            M := true,
+            P := false,
+            r1 := false,
+            r2 := false,
+            r3 := false,
+            r4 := false,
+            r5 := false,
+            AVPLength := 8+8,            
+            VendorID := omit 
+        },
+ 		RANDdatapart:= '1447'O
+	}		
+	template XRES tr_XRES_1:=
+	{
+		aVPHeader :=
+        {
+            AVPCode := 1448,
+            V := false,
+            M := true,
+            P := false,
+            r1 := false,
+            r2 := false,
+            r3 := false,
+            r4 := false,
+            r5 := false,
+            AVPLength := 8+8,            
+            VendorID := omit 
+        },
+ 		XRESdatapart:= '1448'O
+	}	
+	template AUTN tr_AUNT_1:=
+	{
+		aVPHeader :=
+        {
+            AVPCode := 1449,
+            V := false,
+            M := true,
+            P := false,
+            r1 := false,
+            r2 := false,
+            r3 := false,
+            r4 := false,
+            r5 := false,
+            AVPLength := 8+8,            
+            VendorID := omit 
+        },
+ 		AUTNdatapart:= '1449'O
+	}	
+	template KASME tr_KASME_1:=
+	{
+		aVPHeader :=
+        {
+            AVPCode := 1450,
+            V := false,
+            M := true,
+            P := false,
+            r1 := false,
+            r2 := false,
+            r3 := false,
+            r4 := false,
+            r5 := false,
+            AVPLength := 8+8,            
+            VendorID := omit 
+        },
+ 		KASMEdatapart:= '1450'O
+	}	
+
+	template EUTRAN_VectorDatapart tr_EVDP_1:=
+	{
+		item_number:= omit,
+		RANDnum := tr_RAND_1,
+ 		XRESnum:= tr_XRES_1,
+ 		AUTNnum:= tr_AUNT_1,
+		KASMEnum:= tr_KASME_1
+	}
+
+	template EUTRAN_Vector tr_EUTRANVector_1:=
+	{
+		aVPHeader :=
+        {
+            AVPCode := 1414,
+            V := false,
+            M := true,
+            P := false,
+            r1 := false,
+            r2 := false,
+            r3 := false,
+            r4 := false,
+            r5 := false,
+            AVPLength := 8,            
+            VendorID := omit 
+        },
+ 		EUTRANVectorDatapart:= tr_EVDP_1
+	}
+
+ 	template EUTRAN_Authentication_InfoAVP tr_EUTRAN_Authentication_Info_1 := 
+    {
+        aVPHeader :=
+        {
+            AVPCode := 1413,
+            V := false,
+            M := true,
+            P := false,
+            r1 := false,
+            r2 := false,
+            r3 := false,
+            r4 := false,
+            r5 := false,
+            AVPLength := 8,            
+            VendorID := omit 
+        },
+       EAI := tr_EUTRANVector_1	
+	}
+
+	template Diameter_Header tr_diameterheader_1 := 
+ 	{
+			Version := 1,
+			MessageLength := 20+8+8+23+8+28+8+8+8+8+8+8+8+8+8+8+8+8,
+			R := true,
+			P := false,
+			E := false,
+			T := false,
+			r1 := false,
+			r2 := false,
+			r3 := false,
+			r4 := false,
+			CommandCode := 318, //000000000000000100011000        
+			ApplicationID := 16777251,
+			HopByHopID := 4723847,
+			EndToEndID := 5498599        
+	}
+		
+	template DIAMETER_AuthenticationInformationAnswer DIAMETER_AIA_S_T1:=
+	{
+		DiameterHeader:= tr_diameterheader_1,
+		AnsSessionId:= tr_AnsSessionIdData_1,
+		EUTRANAuthInfo:= tr_EUTRAN_Authentication_Info_1
+	}
+			
+    
+}

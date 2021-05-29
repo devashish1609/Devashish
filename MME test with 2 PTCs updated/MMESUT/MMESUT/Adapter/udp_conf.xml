@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<udp_conf>
+ <tri_port>7777</tri_port>
+ <buffer>65535</buffer>
+ <no_pa>False</no_pa>
+ <port_map>
+  <item>
+   <tsi>S1APS</tsi>
+   <sut_addr>::1</sut_addr>
+   <sut_port>10000</sut_port>
+   <sa_port>10001</sa_port>
+  </item>
+  <item>
+   <tsi>S6AS</tsi>
+   <sut_addr>::1</sut_addr>
+   <sut_port>10002</sut_port>
+   <sa_port>10003</sa_port>
+  </item>
+ </port_map>
+</udp_conf>
